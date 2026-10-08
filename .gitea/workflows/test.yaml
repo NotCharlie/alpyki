@@ -20,10 +20,10 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: gitea/checkout@v1
       - name: Run checks
-        uses: ./.github/actions/lint
+        uses: ./.gitea/actions/lint
       - name: Run tests
-        uses: ./.github/actions/test
+        uses: ./.gitea/actions/test
         with:
           python-version: ${{ matrix.python-version }}

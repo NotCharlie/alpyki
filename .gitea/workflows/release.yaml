@@ -13,11 +13,11 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: builtin:checkout
       - name: Run checks
-        uses: ./.github/actions/lint
+        uses: ./.gitea/actions/lint
       - name: Run tests
-        uses: ./.github/actions/test
+        uses: ./.gitea/actions/test
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -27,20 +27,20 @@ jobs:
     needs: [tests-release]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: builtin:checkout
     - name: Set up Python 3.11
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: "3.11"
         cache: pip
     - name: Install dependencies
       run: pip install build
     - name: Validate that tag matches committed version
-      run: python script/validate_version.py --expected_version=${{ github.ref_name }}
+      run: python script/validate_version.py --expected_version=${{ gitea.ref_name }}
     - name: Build
       run: python -m build
-    - name: Create GitHub release
-      uses: softprops/action-gh-release@v2
+    - name: Create Gitea release
+      uses: gitea/gh-release@v1
       with:
         files: dist/*
     - name: Publish package to PyPI
@@ -54,7 +54,7 @@ jobs:
     needs: [publish]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: builtin:checkout
     - name: Set up Python 3.11
       uses: actions/setup-python@v5
       with:
@@ -68,22 +68,8 @@ jobs:
       shell: bash
       run: |
         pdoc --output-dir docs pyfred
-    - uses: actions/upload-pages-artifact@v1
+    - name: Upload docs artifact
+      uses: gitea/upload-artifact@v1
       with:
+        name: docs
         path: docs/
-
-  # Deploy the artifact to GitHub pages.
-  # This is a separate job so that only actions/deploy-pages has the necessary permissions.
-  deploy-docs:
-    name: Deploy docs to GitHub Pages
-    needs: [generate-docs]
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
