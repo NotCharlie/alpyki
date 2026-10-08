@@ -211,7 +211,7 @@ def new(args: argparse.Namespace):
     usage: pyfred new [-h] -k KEYWORD -b BUNDLE_ID --author AUTHOR
                       [--website WEBSITE] [--description DESCRIPTION]
                       [--git | --no-git] [--link | --no-link]
-                      [--vendor | --no-vendor]
+                      [--vendor | --no-vendor] [--actions {github,gitea,none}]
                       name
 
     positional arguments:
@@ -231,6 +231,7 @@ def new(args: argparse.Namespace):
       --link, --no-link     Create a symbolic link to this workflow
       --vendor, --no-vendor
                             Install workflow dependencies
+      --actions             CI platform for release workflow: github (default), gitea, or none
     ```
     """  # noqa: E501
     name = args.name
@@ -252,7 +253,15 @@ def new(args: argparse.Namespace):
         logging.debug("Copying template")
         env = Environment(loader=PackageLoader("pyfred", "template"))
         logging.debug("Generating templates from %s to %s", env.list_templates(), root_dir)
-        for t in [t for t in env.list_templates() if "__pycache__" not in t]:
+
+        def filter_actions(path: str) -> bool:
+            if ".github" not in path and ".gitea" not in path:
+                return True
+            if args.actions == "none":
+                return False
+            return f".{args.actions}" in path
+
+        for t in [t for t in env.list_templates(filter_func=filter_actions) if "__pycache__" not in t]:
             tmp = env.get_template(t)
             outfile = root_dir.joinpath(t)
             outfile.parent.mkdir(parents=True, exist_ok=True)
@@ -586,6 +595,13 @@ def _cli():
     )
     new_parser.add_argument(
         "--vendor", action=argparse.BooleanOptionalAction, default=True, help="Install workflow dependencies"
+    )
+    new_parser.add_argument(
+        "--actions",
+        type=str,
+        choices=["github", "gitea", "none"],
+        default="github",
+        help="CI platform for release workflow (default: github)",
     )
     new_parser.set_defaults(func=new)
 

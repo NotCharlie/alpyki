@@ -12,7 +12,7 @@ exclude = [
 
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools ~= 65.5", "wheel ~= 0.37.1"]
+requires = ["setuptools>=68.0.0", "wheel"]
 
 [tool.pytest.ini_options]
 pythonpath = [

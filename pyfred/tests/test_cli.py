@@ -30,6 +30,10 @@ def test_new(tmpdir):
         author=None,
         website=None,
         description=None,
+        actions="github",
+        git=True,
+        link=True,
+        vendor=True,
     )
     args.name = "test_wf"
 
@@ -138,3 +142,93 @@ def test_exits_if_not_in_workflow_dir(tmpdir):
             with pytest.raises(SystemExit) as excinfo:
                 func(MagicMock(spec=argparse.Namespace))
             assert excinfo.value.code == 1
+
+
+def test_new_actions_github(tmpdir):
+    """Default actions='github' creates .github workflow files."""
+    tmpdir = Path(tmpdir)
+    sync_dir = tmpdir / "sync"
+    workflows = sync_dir / "Alfred.alfredpreferences/workflows"
+    workflows.mkdir(parents=True)
+
+    args = MagicMock(
+        sprc=argparse.Namespace,
+        keyword="test",
+        bundle_id="com.example.test",
+        author=None,
+        website=None,
+        description=None,
+        actions="github",
+        git=True,
+        link=True,
+        vendor=True,
+    )
+    args.name = "test_wf"
+
+    with patch("pathlib.Path.cwd", return_value=tmpdir):
+        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+            with patch("subprocess.call", return_value=0):
+                new(args)
+
+    assert (tmpdir / "test_wf/.github/workflows/build_and_release.yaml").exists()
+    assert not (tmpdir / "test_wf/.gitea").exists()
+
+
+def test_new_actions_gitea(tmpdir):
+    """With actions='gitea', .gitea workflow files are created."""
+    tmpdir = Path(tmpdir)
+    sync_dir = tmpdir / "sync"
+    workflows = sync_dir / "Alfred.alfredpreferences/workflows"
+    workflows.mkdir(parents=True)
+
+    args = MagicMock(
+        sprc=argparse.Namespace,
+        keyword="test",
+        bundle_id="com.example.test",
+        author=None,
+        website=None,
+        description=None,
+        actions="gitea",
+        git=True,
+        link=True,
+        vendor=True,
+    )
+    args.name = "test_wf"
+
+    with patch("pathlib.Path.cwd", return_value=tmpdir):
+        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+            with patch("subprocess.call", return_value=0):
+                new(args)
+
+    assert (tmpdir / "test_wf/.gitea/workflows/build_and_release.yaml").exists()
+    assert not (tmpdir / "test_wf/.github").exists()
+
+
+def test_new_actions_none(tmpdir):
+    """With actions='none', no CI workflow files are created."""
+    tmpdir = Path(tmpdir)
+    sync_dir = tmpdir / "sync"
+    workflows = sync_dir / "Alfred.alfredpreferences/workflows"
+    workflows.mkdir(parents=True)
+
+    args = MagicMock(
+        sprc=argparse.Namespace,
+        keyword="test",
+        bundle_id="com.example.test",
+        author=None,
+        website=None,
+        description=None,
+        actions="none",
+        git=True,
+        link=True,
+        vendor=True,
+    )
+    args.name = "test_wf"
+
+    with patch("pathlib.Path.cwd", return_value=tmpdir):
+        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+            with patch("subprocess.call", return_value=0):
+                new(args)
+
+    assert not (tmpdir / "test_wf/.github").exists()
+    assert not (tmpdir / "test_wf/.gitea").exists()

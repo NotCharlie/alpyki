@@ -15,16 +15,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7.0.1
 
     - name: Set up Python {{ system_python_version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v7.0.0
       with:
         python-version: "{{ system_python_version }}"
 
     - name: Install pyfred
       run: |
-        pip install git+https://github.com/acourtneybrown/pyfred-cli@main
+        pip install git+https://gitea.notcharlie.com/acourtneybrown/pyfred-cli@main
 
     - name: Package
       run: |
@@ -32,12 +32,12 @@ jobs:
 
     - name: Build Changelog
       id: github_release
-      uses: mikepenz/release-changelog-builder-action@v5
+      uses: mikepenz/release-changelog-builder-action@v6.4.0
       env:
         GITHUB_TOKEN: ${{ '${{ secrets.GITHUB_TOKEN }}' }}
 
     - name: Create release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3.0.3
       with:
         files: dist/*.alfredworkflow
         body: ${{ '${{ steps.github_release.outputs.changelog }}' }}

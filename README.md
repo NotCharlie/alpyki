@@ -37,8 +37,11 @@ The following example creates a `hello` directory containing a workflow that can
 result of the selected action is copied to the clipboard.
 
 ```shell
-pyfred new hello -k hi -b de.muffix.helloalfred --author=Muffix --description="Hello Alfred".
+pyfred new hello -k hi -b de.muffix.helloalfred --author=Muffix --description="Hello Alfred"
 ```
+
+By default, a GitHub Actions workflow for releases is included. Use `--actions gitea` to generate a Gitea Actions
+workflow instead, or `--actions none` to omit CI files entirely.
 
 ### Link
 
@@ -111,8 +114,11 @@ The file name must be `icon.png`
 
 You can assign individual icons to your output items. See the `pyalfred.model.Icon` class for more details.
 
-## Distribution through GitHub releases
+## Distribution through CI releases
 
-The skeleton created by `pyfred new` comes with a GitHub action that creates a draft release whenever a tag starting
+The skeleton created by `pyfred new` comes with a CI action that creates a draft release whenever a tag starting
 with `v` is pushed. To create a tag, run `git tag v1.0.0` and push it with `git push origin v1.0.0`. When the action
 has finished, go to the Releases page of your repository and publish the new release.
+
+By default, a GitHub Actions workflow is generated. Use `pyfred new ... --actions gitea` to generate a Gitea Actions
+workflow instead. Pass `--actions none` to skip CI files.
