@@ -20,7 +20,7 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
     steps:
-      - uses: gitea/checkout@v1
+      - uses: builtins:checkout
       - name: Run checks
         uses: ./.gitea/actions/lint
       - name: Run tests
