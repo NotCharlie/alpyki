@@ -211,7 +211,7 @@ def new(args: argparse.Namespace):
     usage: pyfred new [-h] -k KEYWORD -b BUNDLE_ID --author AUTHOR
                       [--website WEBSITE] [--description DESCRIPTION]
                       [--git | --no-git] [--link | --no-link]
-                      [--vendor | --no-vendor] [--actions {github,gitea,none}]
+                      [--vendor | --no-vendor] [--actions {github,gitea,gitlab,none}]
                       name
 
     positional arguments:
@@ -231,7 +231,7 @@ def new(args: argparse.Namespace):
       --link, --no-link     Create a symbolic link to this workflow
       --vendor, --no-vendor
                             Install workflow dependencies
-      --actions             CI platform for release workflow: github (default), gitea, or none
+       --actions, --ci       CI platform for release workflow: github (default), gitea, gitlab, or none
     ```
     """  # noqa: E501
     name = args.name
@@ -255,10 +255,12 @@ def new(args: argparse.Namespace):
         logging.debug("Generating templates from %s to %s", env.list_templates(), root_dir)
 
         def filter_actions(path: str) -> bool:
-            if ".github" not in path and ".gitea" not in path:
+            if ".github" not in path and ".gitea" not in path and ".gitlab" not in path:
                 return True
             if args.actions == "none":
                 return False
+            if args.actions == "gitlab":
+                return ".gitlab" in path
             return f".{args.actions}" in path
 
         for t in [t for t in env.list_templates(filter_func=filter_actions) if "__pycache__" not in t]:
@@ -598,8 +600,9 @@ def _cli():
     )
     new_parser.add_argument(
         "--actions",
+        "--ci",
         type=str,
-        choices=["github", "gitea", "none"],
+        choices=["github", "gitea", "gitlab", "none"],
         default="github",
         help="CI platform for release workflow (default: github)",
     )

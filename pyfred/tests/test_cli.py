@@ -172,6 +172,7 @@ def test_new_actions_github(tmpdir):
 
     assert (tmpdir / "test_wf/.github/workflows/build_and_release.yaml").exists()
     assert not (tmpdir / "test_wf/.gitea").exists()
+    assert not (tmpdir / "test_wf/.gitlab-ci.yml").exists()
 
 
 def test_new_actions_gitea(tmpdir):
@@ -202,6 +203,38 @@ def test_new_actions_gitea(tmpdir):
 
     assert (tmpdir / "test_wf/.gitea/workflows/build_and_release.yaml").exists()
     assert not (tmpdir / "test_wf/.github").exists()
+    assert not (tmpdir / "test_wf/.gitlab-ci.yml").exists()
+
+
+def test_new_actions_gitlab(tmpdir):
+    """With actions='gitlab', .gitlab-ci.yml is created."""
+    tmpdir = Path(tmpdir)
+    sync_dir = tmpdir / "sync"
+    workflows = sync_dir / "Alfred.alfredpreferences/workflows"
+    workflows.mkdir(parents=True)
+
+    args = MagicMock(
+        sprc=argparse.Namespace,
+        keyword="test",
+        bundle_id="com.example.test",
+        author=None,
+        website=None,
+        description=None,
+        actions="gitlab",
+        git=True,
+        link=True,
+        vendor=True,
+    )
+    args.name = "test_wf"
+
+    with patch("pathlib.Path.cwd", return_value=tmpdir):
+        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+            with patch("subprocess.call", return_value=0):
+                new(args)
+
+    assert (tmpdir / "test_wf/.gitlab-ci.yml").exists()
+    assert not (tmpdir / "test_wf/.github").exists()
+    assert not (tmpdir / "test_wf/.gitea").exists()
 
 
 def test_new_actions_none(tmpdir):
@@ -232,3 +265,4 @@ def test_new_actions_none(tmpdir):
 
     assert not (tmpdir / "test_wf/.github").exists()
     assert not (tmpdir / "test_wf/.gitea").exists()
+    assert not (tmpdir / "test_wf/.gitlab-ci.yml").exists()

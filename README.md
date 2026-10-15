@@ -41,7 +41,8 @@ pyfred new hello -k hi -b de.muffix.helloalfred --author=Muffix --description="H
 ```
 
 By default, a GitHub Actions workflow for releases is included. Use `--actions gitea` to generate a Gitea Actions
-workflow instead, or `--actions none` to omit CI files entirely.
+workflow instead, `--actions gitlab` for GitLab CI, or `--actions none` to omit CI files entirely. The `--ci` flag
+is an alias for `--actions`.
 
 ### Link
 
@@ -121,4 +122,5 @@ with `v` is pushed. To create a tag, run `git tag v1.0.0` and push it with `git 
 has finished, go to the Releases page of your repository and publish the new release.
 
 By default, a GitHub Actions workflow is generated. Use `pyfred new ... --actions gitea` to generate a Gitea Actions
-workflow instead. Pass `--actions none` to skip CI files.
+workflow, `--actions gitlab` for GitLab CI, or `--actions none` to skip CI files. The `--ci` flag is an alias for
+`--actions`.
