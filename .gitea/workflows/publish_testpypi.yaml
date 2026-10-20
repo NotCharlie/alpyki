@@ -1,0 +1,41 @@
+name: Publish to TestPyPI
+
+on:
+  push:
+    tags:
+      - 'test-v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish to TestPyPI
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: builtin:checkout
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7.0.0
+        with:
+          python-version: "3.11"
+
+      - name: Install build dependencies
+        run: pip install build twine
+
+      - name: Build package
+        run: python -m build
+
+      - name: Validate version
+        run: |
+          pip install .
+          python script/validate_version.py -e "${{ github.ref_name }}"
+
+      - name: Publish to TestPyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
+        run: twine upload --repository testpypi dist/*

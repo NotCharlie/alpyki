@@ -1,30 +1,26 @@
-# Pyfred
+# alpyki - *Al*fred *Py*thon *Ki*t
 
-`pyfred` helps you create [Alfred](https://www.alfredapp.com/) workflows in Python. It has been heavily inspired by a
-similar project for Rust, [powerpack](https://github.com/rossmacarthur/powerpack).
+`alpyki` helps you create [Alfred](https://www.alfredapp.com/) workflows in Python. It started as a personal extension
+of [`pyfred`](https://github.com/muffix/pyfred-cli.git)
 
 It comes with a CLI that helps bootstrapping, maintaining and packaging the workflow.
 
 Dependencies are vendored and packaged with the workflow so that they don't need to be installed into the system Python.
 See the [section on adding dependencies](#adding-dependencies) for details.
 
-## Documentation
-
-The documentation is deployed to [GitHub pages](https://muffix.github.io/pyfred-cli).
-
 ## Installation
 
 You can install directly from PyPI:
 
 ```shell
-pip install pyfred-cli
+pip install alpyki
 ```
 
 ## Using the CLI
 
 The CLI knows four commands: `new`, `link`, `package`, `vendor`.
 
-See `pyfred {new,vendor,link,package} -h` for detailed help.
+See `alpyki {new,vendor,link,package} -h` for detailed help.
 
 ### New
 
@@ -37,7 +33,7 @@ The following example creates a `hello` directory containing a workflow that can
 result of the selected action is copied to the clipboard.
 
 ```shell
-pyfred new hello -k hi -b de.muffix.helloalfred --author=Muffix --description="Hello Alfred"
+alpyki new hello -k hi -b de.muffix.helloalfred --author=Muffix --description="Hello Alfred"
 ```
 
 By default, a GitHub Actions workflow for releases is included. Use `--actions gitea` to generate a Gitea Actions
@@ -49,7 +45,7 @@ is an alias for `--actions`.
 Executed from a directory bootstrapped by this CLI, it links or relinks the workflow into Alfred.
 
 ```shell
-pyfred link
+alpyki link
 ```
 
 ### Vendor
@@ -58,7 +54,7 @@ Downloads the dependencies listed in the `requirements.txt` file and vendors the
 directory. Doing this avoids having to install them into the system Python interpreter.
 
 ```shell
-pyfred vendor
+alpyki vendor
 ```
 
 ### Package
@@ -67,7 +63,7 @@ Packages the workflow into a `*.alfredworkflow` file in the `dist` directory. Th
 all dependencies. It can be distributed and imported.
 
 ```shell
-pyfred package
+alpyki package
 ```
 
 ### Debug output
@@ -76,16 +72,16 @@ The CLI will log debug output if the `--debug` flag is passed before the command
 
 ## Creating a workflow
 
-The classes from the `pyfred.model` module represent the output expected by Alfred from a script filter.
+The classes from the `alpyki.model` module represent the output expected by Alfred from a script filter.
 
-`pyfred.workflow` provides a decorator for the entry point of a filter. It preprocesses the input and serialises the
+`alpyki.workflow` provides a decorator for the entry point of a filter. It preprocesses the input and serialises the
 response to stdout, where it is being picked up by the next input.
 
 A minimal example for a script filter workflow looks like this:
 
 ```python
-from pyfred.model import Environment, OutputItem, ScriptFilterOutput
-from pyfred.workflow import script_filter
+from alpyki.model import Environment, OutputItem, ScriptFilterOutput
+from alpyki.workflow import script_filter
 
 @script_filter
 def main(script_path: Path, args_from_alfred: list[str], env: Optional[Environment]) -> ScriptFilterOutput:
@@ -96,9 +92,9 @@ def main(script_path: Path, args_from_alfred: list[str], env: Optional[Environme
 
 When running the workflow, Alfred will use the system Python interpreter to run the script. Third-party libraries are
 not available in the interpreter unless explicitly installed. In order to not pollute the system Python, dependencies
-can be vendored with the workflow using the `pyfred vendor` command. It is also automatically run with `pyfred package`.
+can be vendored with the workflow using the `alpyki vendor` command. It is also automatically run with `alpyki package`.
 
-If you add dependencies to your `requirements.txt` file, you need to run `pyfred vendor` to download them. You do _not_
+If you add dependencies to your `requirements.txt` file, you need to run `alpyki vendor` to download them. You do *not*
 need to prefix the import with `vendored` because the template adds that directory to the `PYTHONPATH` variable when the
 workflow runs.
 
@@ -113,14 +109,14 @@ project settings. This helps it resolve the imports correctly.
 You can add an icon for your workflow to the `Workflow` directory in the generated skeleton.
 The file name must be `icon.png`
 
-You can assign individual icons to your output items. See the `pyalfred.model.Icon` class for more details.
+You can assign individual icons to your output items. See the `alpyki.model.Icon` class for more details.
 
 ## Distribution through CI releases
 
-The skeleton created by `pyfred new` comes with a CI action that creates a draft release whenever a tag starting
+The skeleton created by `alpyki new` comes with a CI action that creates a draft release whenever a tag starting
 with `v` is pushed. To create a tag, run `git tag v1.0.0` and push it with `git push origin v1.0.0`. When the action
 has finished, go to the Releases page of your repository and publish the new release.
 
-By default, a GitHub Actions workflow is generated. Use `pyfred new ... --actions gitea` to generate a Gitea Actions
+By default, a GitHub Actions workflow is generated. Use `alpyki new ... --actions gitea` to generate a Gitea Actions
 workflow, `--actions gitlab` for GitLab CI, or `--actions none` to skip CI files. The `--ci` flag is an alias for
 `--actions`.

@@ -3,8 +3,8 @@ from pathlib import PosixPath
 
 import pytest
 
-from pyfred.model import CacheConfig, Environment, OutputItem, ScriptFilterOutput
-from pyfred.workflow import external_script, script_filter
+from alpyki.model import CacheConfig, Environment, OutputItem, ScriptFilterOutput
+from alpyki.workflow import external_script, script_filter
 
 
 @pytest.fixture(autouse=True)

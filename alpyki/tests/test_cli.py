@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, call, patch
 
 import pytest
 
-from pyfred.cli import (
+from alpyki.cli import (
     _get_workflows_directory,
     link,
     new,
@@ -14,7 +14,7 @@ from pyfred.cli import (
     show_link,
     vendor,
 )
-from pyfred.model import Data, Icon, Key, OutputItem, ScriptFilterOutput, Text, Type
+from alpyki.model import Data, Icon, Key, OutputItem, ScriptFilterOutput, Text, Type
 
 
 def test_new(tmpdir):
@@ -51,7 +51,7 @@ def test_new(tmpdir):
     )
 
     with patch("pathlib.Path.cwd", return_value=tmpdir):
-        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+        with patch("alpyki.cli._get_sync_directory", return_value=sync_dir):
             with patch("subprocess.call", return_value=0) as mock_sub:
                 new(args)
                 assert mock_sub.call_count == 2
@@ -67,7 +67,7 @@ def test_new(tmpdir):
 def test_get_workflows_directory():
     expected = Path.home() / "Library/Application Support/Alfred/Alfred.alfredpreferences/workflows"
 
-    with patch("pyfred.cli._get_sync_directory", return_value=None):
+    with patch("alpyki.cli._get_sync_directory", return_value=None):
         assert _get_workflows_directory() == expected
 
 
@@ -110,9 +110,9 @@ def test_show_link_with_link(tmpdir):
     link_path = Path("/path/to/workflow/link")
 
     with patch("pathlib.Path.cwd", return_value=tmpdir):
-        with patch("pyfred.cli._info_plist_path") as mock_info_plist_path:
+        with patch("alpyki.cli._info_plist_path") as mock_info_plist_path:
             mock_info_plist_path.return_value.exists.return_value = True
-            with patch("pyfred.cli.find_workflow_link", return_value=link_path) as mock_find:
+            with patch("alpyki.cli.find_workflow_link", return_value=link_path) as mock_find:
                 with patch("builtins.print") as mock_print:
                     show_link(MagicMock(spec=argparse.Namespace))
                     mock_find.assert_called_once_with(wf_dir)
@@ -125,15 +125,15 @@ def test_show_link_without_link(tmpdir):
     wf_dir.mkdir(parents=True)
 
     with patch("pathlib.Path.cwd", return_value=tmpdir):
-        with patch("pyfred.cli._info_plist_path") as mock_info_plist_path:
+        with patch("alpyki.cli._info_plist_path") as mock_info_plist_path:
             mock_info_plist_path.return_value.exists.return_value = True
-            with patch("pyfred.cli.find_workflow_link", return_value=None) as mock_find:
+            with patch("alpyki.cli.find_workflow_link", return_value=None) as mock_find:
                 with patch("logging.error") as mock_error:
                     with pytest.raises(SystemExit) as excinfo:
                         show_link(MagicMock(spec=argparse.Namespace))
                     assert excinfo.value.code == 1
                     mock_find.assert_called_once_with(wf_dir)
-                    mock_error.assert_called_once_with("No workflow link found. Use 'pyfred link' to create one.")
+                    mock_error.assert_called_once_with("No workflow link found. Use 'alpyki link' to create one.")
 
 
 def test_exits_if_not_in_workflow_dir(tmpdir):
@@ -166,7 +166,7 @@ def test_new_actions_github(tmpdir):
     args.name = "test_wf"
 
     with patch("pathlib.Path.cwd", return_value=tmpdir):
-        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+        with patch("alpyki.cli._get_sync_directory", return_value=sync_dir):
             with patch("subprocess.call", return_value=0):
                 new(args)
 
@@ -197,7 +197,7 @@ def test_new_actions_gitea(tmpdir):
     args.name = "test_wf"
 
     with patch("pathlib.Path.cwd", return_value=tmpdir):
-        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+        with patch("alpyki.cli._get_sync_directory", return_value=sync_dir):
             with patch("subprocess.call", return_value=0):
                 new(args)
 
@@ -228,7 +228,7 @@ def test_new_actions_gitlab(tmpdir):
     args.name = "test_wf"
 
     with patch("pathlib.Path.cwd", return_value=tmpdir):
-        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+        with patch("alpyki.cli._get_sync_directory", return_value=sync_dir):
             with patch("subprocess.call", return_value=0):
                 new(args)
 
@@ -259,7 +259,7 @@ def test_new_actions_none(tmpdir):
     args.name = "test_wf"
 
     with patch("pathlib.Path.cwd", return_value=tmpdir):
-        with patch("pyfred.cli._get_sync_directory", return_value=sync_dir):
+        with patch("alpyki.cli._get_sync_directory", return_value=sync_dir):
             with patch("subprocess.call", return_value=0):
                 new(args)
 

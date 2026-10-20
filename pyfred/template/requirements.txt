@@ -1,1 +1,0 @@
-pyfred-cli

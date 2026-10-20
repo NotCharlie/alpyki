@@ -1,5 +1,5 @@
 name: test
-description: Run pyfred-cli tests
+description: Run alpyki tests
 inputs:
   python-version:
     description: The Python version to use
@@ -24,8 +24,8 @@ runs:
     - name: mypy
       shell: bash
       run: |
-        mypy pyfred
+        mypy alpyki
     - name: Try to generate documentation
       shell: bash
       run: |
-        pdoc --output-dir docs pyfred
+        pdoc --output-dir docs alpyki

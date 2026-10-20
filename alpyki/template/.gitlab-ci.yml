@@ -40,10 +40,10 @@ package_on_tag:
     - pip install virtualenv
     - virtualenv venv
     - source venv/bin/activate
-    - pip install git+https://github.com/acourtneybrown/pyfred-cli@main
+    - pip install git+https://github.com/acourtneybrown/alpyki@main
 
   script:
-    - pyfred package --name $CI_PROJECT_NAME
+    - alpyki package --name $CI_PROJECT_NAME
 
   artifacts:
     paths:

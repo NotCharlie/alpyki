@@ -208,7 +208,7 @@ def new(args: argparse.Namespace):
     workflow shows in the Alfred Preferences app and can still be easily edited with an external editor.
 
     ```
-    usage: pyfred new [-h] -k KEYWORD -b BUNDLE_ID --author AUTHOR
+    usage: alpyki new [-h] -k KEYWORD -b BUNDLE_ID --author AUTHOR
                       [--website WEBSITE] [--description DESCRIPTION]
                       [--git | --no-git] [--link | --no-link]
                       [--vendor | --no-vendor] [--actions {github,gitea,gitlab,none}]
@@ -251,7 +251,7 @@ def new(args: argparse.Namespace):
     }
     try:
         logging.debug("Copying template")
-        env = Environment(loader=PackageLoader("pyfred", "template"))
+        env = Environment(loader=PackageLoader("alpyki", "template"))
         logging.debug("Generating templates from %s to %s", env.list_templates(), root_dir)
 
         def filter_actions(path: str) -> bool:
@@ -309,7 +309,7 @@ def link(args: argparse.Namespace):
     Entry point for the `link` command. Links or relinks the workflow into Alfred's workflows directory.
 
     ```
-    usage: pyfred link [-h] [--relink | --no-relink] [--same-path | --no-same-path]
+    usage: alpyki link [-h] [--relink | --no-relink] [--same-path | --no-same-path]
 
     options:
       -h, --help            show this help message and exit
@@ -386,7 +386,7 @@ def vendor(args: argparse.Namespace):
     dependencies in that directory, in addition to the workflow directory.
 
     ```
-    usage: pyfred vendor [-h] [--upgrade | --no-upgrade]
+    usage: alpyki vendor [-h] [--upgrade | --no-upgrade]
 
     options:
       -h, --help            show this help message and exit
@@ -473,7 +473,7 @@ def package(args: argparse.Namespace):
     Users can import the package by double-clicking the file.
 
     ```
-    usage: pyfred package [-h] --name NAME
+    usage: alpyki package [-h] --name NAME
 
     options:
       -h, --help   show this help message and exit
@@ -517,7 +517,7 @@ def show_link(args: argparse.Namespace) -> None:
     Entry point for the `show-link` command. Displays the link in the installed workflows directory for this project.
 
     ```
-    usage: pyfred show-link [-h]
+    usage: alpyki show-link [-h]
 
     options:
       -h, --help  show this help message and exit
@@ -529,7 +529,7 @@ def show_link(args: argparse.Namespace) -> None:
     if link_path:
         print(link_path)
     else:
-        logging.error("No workflow link found. Use 'pyfred link' to create one.")
+        logging.error("No workflow link found. Use 'alpyki link' to create one.")
         sys.exit(1)
 
 
@@ -538,7 +538,7 @@ def _cli():
     The entry point for the CLI.
 
     ```
-    usage: pyfred [-h] {new,vendor,link,package,version,name,show-link} ...
+    usage: alpyki [-h] {new,vendor,link,package,version,name,show-link} ...
 
     Build Python workflows for Alfred with ease
 
@@ -558,7 +558,7 @@ def _cli():
     ```
 
     """
-    parser = argparse.ArgumentParser(prog="pyfred", description="Build Python workflows for Alfred with ease")
+    parser = argparse.ArgumentParser(prog="alpyki", description="Build Python workflows for Alfred with ease")
     parser.add_argument(
         "--debug",
         action=argparse.BooleanOptionalAction,

@@ -1,5 +1,5 @@
 name: lint
-description: Run pyfred-cli tests
+description: Run alpyki tests
 runs:
   using: composite
   steps:

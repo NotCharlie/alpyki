@@ -22,15 +22,15 @@ jobs:
       with:
         python-version: "{{ system_python_version }}"
 
-    - name: Install pyfred
+    - name: Install alpyki
       run: |
-        pip install git+https://gitea.notcharlie.com/acourtneybrown/pyfred-cli@main
+        pip install git+https://gitea.notcharlie.com/acourtneybrown/alpyki@main
 
     - name: Package
       env:
         REPO: ${{ '{{ github.event.repository.name }}' }}
       run: |
-        pyfred package --name $REPO
+        alpyki package --name $REPO
 
     - name: Build Changelog
       id: changelog

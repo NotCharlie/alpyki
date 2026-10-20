@@ -6,13 +6,15 @@ line-length = 120
 
 [tool.mypy]
 exclude = [
-    "^pyfred/tests",
-    "^pyfred/template",
+    "^alpyki/tests",
+    "^alpyki/template",
 ]
 
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools>=68.0.0", "wheel"]
+requires = ["setuptools>=68.0.0", "wheel", "setuptools-scm>=8.0"]
+
+[tool.setuptools_scm]
 
 [tool.pytest.ini_options]
 pythonpath = [

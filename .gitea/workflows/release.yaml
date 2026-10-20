@@ -3,7 +3,7 @@ name: Publish
 on:
   push:
     tags:
-      - 'v*'
+      - 'DISABLED-v*'
 
 jobs:
   tests-release:
@@ -67,7 +67,7 @@ jobs:
     - name: Generate docs
       shell: bash
       run: |
-        pdoc --output-dir docs pyfred
+        pdoc --output-dir docs alpyki
     - name: Upload docs artifact
       uses: gitea/upload-artifact@v1
       with:

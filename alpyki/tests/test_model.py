@@ -1,6 +1,6 @@
 import pytest
 
-from pyfred.model import Icon, OutputItem, ScriptFilterOutput
+from alpyki.model import Icon, OutputItem, ScriptFilterOutput
 
 
 def test_model_validation():

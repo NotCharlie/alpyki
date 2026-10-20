@@ -1,6 +1,6 @@
 # Contributor guidelines
 
-Thank you for considering a contribution to `pyfred`.
+Thank you for considering a contribution to `alpyki`.
 
 The main goal of this project is to facilitate building Alfred workflows without having to worry about the setup and
 distribution. It should be easy to bootstrap a new workflow, the code should be editable in the author's favourite IDE
@@ -28,7 +28,7 @@ checks before committing. The hooks need to be installed once with `pre-commit i
 
 ## Tests
 
-New functionality should be covered with tests where possible. See the `pyalfred.tests` module for examples.
+New functionality should be covered with tests where possible. See the `alpyki.tests` module for examples.
 
 To run the tests, just run `pytest`.
 
@@ -37,3 +37,17 @@ To run the tests, just run `pytest`.
 There is a job in GitHub actions (and a pre-commit hook) making sure that changed Python files all pass
 [mypy](https://github.com/python/mypy) checks. Please add type hints to new methods and make sure the code passes the
 checks.
+
+## Releasing
+
+For release procedures, see [RELEASE.md](RELEASE.md).
+
+The short version for a production release:
+
+```bash
+git tag v0.1.7
+git push origin v0.1.7
+```
+
+This triggers the CI workflow to build and publish to PyPI automatically. For manual publishing or TestPyPI testing,
+refer to the full guide.

@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from typing import Any, Callable, Optional, Union
 
-from pyfred.model import Environment, ScriptFilterOutput
+from alpyki.model import Environment, ScriptFilterOutput
 
 
 def script_filter(fn: Callable[[Path, list[str], Optional[Environment]], ScriptFilterOutput]):
