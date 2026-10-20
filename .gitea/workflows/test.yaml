@@ -8,6 +8,7 @@ on:
     branches: "*"
     tags-ignore:
       - v*
+      - test-v*
 
 permissions:
   contents: read
