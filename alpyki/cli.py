@@ -6,6 +6,7 @@ import re
 import stat
 import subprocess
 import sys
+from importlib.metadata import version as get_version
 from pathlib import Path
 from typing import Callable, Optional
 from uuid import uuid4
@@ -242,6 +243,7 @@ def new(args: argparse.Namespace):
 
     context = {
         "year": datetime.datetime.now().year,
+        "alpyki_version": get_version("alpyki"),
         "system_python_version": subprocess.check_output(
             ["/usr/bin/python3", "-c", "print(__import__('platform').python_version())"]
         )

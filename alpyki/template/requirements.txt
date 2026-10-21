@@ -1,1 +1,1 @@
-alpyki
+alpyki=={{ alpyki_version }}

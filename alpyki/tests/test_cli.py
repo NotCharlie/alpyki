@@ -1,6 +1,7 @@
 import argparse
 import json
 import sys
+from importlib.metadata import PackageNotFoundError
 from pathlib import Path
 from unittest.mock import MagicMock, call, patch
 
@@ -266,3 +267,62 @@ def test_new_actions_none(tmpdir):
     assert not (tmpdir / "test_wf/.github").exists()
     assert not (tmpdir / "test_wf/.gitea").exists()
     assert not (tmpdir / "test_wf/.gitlab-ci.yml").exists()
+
+
+def test_new_requirements_txt_has_version(tmpdir):
+    """Generated requirements.txt pins the installed alpyki version."""
+    tmpdir = Path(tmpdir)
+    sync_dir = tmpdir / "sync"
+    workflows = sync_dir / "Alfred.alfredpreferences/workflows"
+    workflows.mkdir(parents=True)
+
+    args = MagicMock(
+        sprc=argparse.Namespace,
+        keyword="test",
+        bundle_id="com.example.test",
+        author=None,
+        website=None,
+        description=None,
+        actions="none",
+        git=False,
+        link=False,
+        vendor=False,
+    )
+    args.name = "test_wf"
+
+    with patch("pathlib.Path.cwd", return_value=tmpdir):
+        with patch("alpyki.cli._get_sync_directory", return_value=sync_dir):
+            with patch("subprocess.call", return_value=0):
+                with patch("alpyki.cli.get_version", return_value="1.2.3"):
+                    new(args)
+
+    requirements = (tmpdir / "test_wf/requirements.txt").read_text()
+    assert "alpyki==1.2.3" in requirements
+
+
+def test_new_fails_when_not_installed(tmpdir):
+    """new() raises PackageNotFoundError when alpyki is not installed."""
+    tmpdir = Path(tmpdir)
+    sync_dir = tmpdir / "sync"
+    workflows = sync_dir / "Alfred.alfredpreferences/workflows"
+    workflows.mkdir(parents=True)
+
+    args = MagicMock(
+        sprc=argparse.Namespace,
+        keyword="test",
+        bundle_id="com.example.test",
+        author=None,
+        website=None,
+        description=None,
+        actions="none",
+        git=False,
+        link=False,
+        vendor=False,
+    )
+    args.name = "test_wf"
+
+    with patch("pathlib.Path.cwd", return_value=tmpdir):
+        with patch("alpyki.cli._get_sync_directory", return_value=sync_dir):
+            with patch("alpyki.cli.get_version", side_effect=PackageNotFoundError("alpyki")):
+                with pytest.raises(PackageNotFoundError):
+                    new(args)
