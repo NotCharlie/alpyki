@@ -18,9 +18,11 @@ pip install alpyki
 
 ## Using the CLI
 
-The CLI knows four commands: `new`, `link`, `package`, `vendor`.
+The CLI knows the following commands: `new`, `link`, `vendor`, `package`, `release`, `version`, `name`, `show-link`.
 
-See `alpyki {new,vendor,link,package} -h` for detailed help.
+See `alpyki <command> -h` for detailed help.
+
+The CLI also supports a top-level `--version` flag to display the installed version of alpyki.
 
 ### New
 
@@ -66,9 +68,43 @@ all dependencies. It can be distributed and imported.
 alpyki package
 ```
 
+### Release
+
+Updates the workflow version in `info.plist`, commits the change, creates an annotated git tag, and pushes both to the
+remote. Use it to prepare a release for distribution through CI.
+
+```shell
+alpyki release --version 1.0.0
+```
+
+### Version
+
+Prints the current version of the workflow as defined in `info.plist`.
+
+```shell
+alpyki version
+```
+
+### Name
+
+Prints the name of the workflow as defined in `info.plist`.
+
+```shell
+alpyki name
+```
+
+### Show Link
+
+Prints the path to the symbolic link in Alfred's installed workflows directory.
+
+```shell
+alpyki show-link
+```
+
 ### Debug output
 
-The CLI will log debug output if the `--debug` flag is passed before the command.
+The CLI will log debug output if the `--debug` flag is passed before the command. Pass `--no-debug` to explicitly
+disable it. Use `--version` to display the installed version of alpyki.
 
 ## Creating a workflow
 
@@ -114,7 +150,7 @@ You can assign individual icons to your output items. See the `alpyki.model.Icon
 ## Distribution through CI releases
 
 The skeleton created by `alpyki new` comes with a CI action that creates a draft release whenever a tag starting
-with `v` is pushed. To create a tag, run `git tag v1.0.0` and push it with `git push origin v1.0.0`. When the action
+like `#.#.#` is pushed. To create a tag, run `git tag 1.0.0` and push it with `git push origin 1.0.0`. When the action
 has finished, go to the Releases page of your repository and publish the new release.
 
 By default, a GitHub Actions workflow is generated. Use `alpyki new ... --actions gitea` to generate a Gitea Actions

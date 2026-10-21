@@ -1,21 +1,13 @@
 name: lint
-description: Run alpyki tests
+description: Lint files
 runs:
   using: composite
   steps:
-    - name: Lint changelog
-      uses: docker://avtodev/markdown-lint:v1
-      with:
-        rules: "/lint/rules/changelog.js"
-        config: "/lint/config/changelog.yml"
-        args: "CHANGELOG.md"
     - name: Lint other Markdown files
-      uses: articulate/actions-markdownlint@main
+      uses: DavidAnson/markdownlint-cli2-action@v24.2.0
       with:
-        files: "**/*.md"
-        ignore: CHANGELOG.md
         config: .markdownlint.yaml
-        version: 0.28.1
+        globs: "**/*.md"
     - uses: ricardochaves/python-lint@v1.4.0
       with:
         use-pylint: false
