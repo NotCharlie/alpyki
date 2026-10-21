@@ -556,11 +556,18 @@ def _cli():
 
     options:
       -h, --help            show this help message and exit
+      --version             display the version of alpyki
       --debug, --no-debug   Whether to enable debug logging (default: False)
     ```
 
     """
     parser = argparse.ArgumentParser(prog="alpyki", description="Build Python workflows for Alfred with ease")
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=get_version("alpyki"),
+        help="Display the version of alpyki",
+    )
     parser.add_argument(
         "--debug",
         action=argparse.BooleanOptionalAction,

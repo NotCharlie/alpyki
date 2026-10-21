@@ -8,6 +8,7 @@ from unittest.mock import MagicMock, call, patch
 import pytest
 
 from alpyki.cli import (
+    _cli,
     _get_workflows_directory,
     link,
     new,
@@ -326,3 +327,15 @@ def test_new_fails_when_not_installed(tmpdir):
             with patch("alpyki.cli.get_version", side_effect=PackageNotFoundError("alpyki")):
                 with pytest.raises(PackageNotFoundError):
                     new(args)
+
+
+def test_cli_version(capsys):
+    """--version prints the installed alpyki version and exits."""
+    with patch("alpyki.cli.get_version", return_value="1.2.3"):
+        with patch("sys.argv", ["alpyki", "--version"]):
+            with pytest.raises(SystemExit) as excinfo:
+                _cli()
+            assert excinfo.value.code == 0
+
+    out = capsys.readouterr()
+    assert "1.2.3" in out.out
