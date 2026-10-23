@@ -339,3 +339,39 @@ def test_cli_version(capsys):
 
     out = capsys.readouterr()
     assert "1.2.3" in out.out
+
+
+def test_completion_zsh(capsys):
+    """completion with --shell zsh generates a zsh completion script."""
+    with patch("sys.argv", ["alpyki", "completion", "--shell", "zsh"]):
+        _cli()
+
+    out = capsys.readouterr()
+    assert "alpyki" in out.out
+    assert "zsh" in out.out
+
+
+def test_completion_bash(capsys):
+    """completion with --shell bash generates a bash completion script."""
+    with patch("sys.argv", ["alpyki", "completion", "--shell", "bash"]):
+        _cli()
+
+    out = capsys.readouterr()
+    assert "alpyki" in out.out
+
+
+def test_completion_fish(capsys):
+    """completion with --shell fish generates a fish completion script."""
+    with patch("sys.argv", ["alpyki", "completion", "--shell", "fish"]):
+        _cli()
+
+    out = capsys.readouterr()
+    assert "alpyki" in out.out
+
+
+def test_completion_invalid_shell(capsys):
+    """completion with unsupported shell exits with error."""
+    with patch("sys.argv", ["alpyki", "completion", "--shell", "powershell"]):
+        with pytest.raises(SystemExit) as excinfo:
+            _cli()
+        assert excinfo.value.code != 0

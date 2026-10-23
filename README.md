@@ -18,7 +18,7 @@ pip install alpyki
 
 ## Using the CLI
 
-The CLI knows the following commands: `new`, `link`, `vendor`, `package`, `release`, `version`, `name`, `show-link`.
+The CLI knows the following commands: `new`, `link`, `vendor`, `package`, `release`, `version`, `name`, `show-link`, `completion`.
 
 See `alpyki <command> -h` for detailed help.
 
@@ -99,6 +99,35 @@ Prints the path to the symbolic link in Alfred's installed workflows directory.
 
 ```shell
 alpyki show-link
+```
+
+### Completion
+
+Generates a shell completion script for auto-completion of commands and arguments. Add the appropriate
+line to your shell's configuration file to enable completions:
+
+#### Bash
+
+Add to `~/.bashrc`:
+
+```shell
+eval "$(alpyki completion --shell bash)"
+```
+
+#### Zsh
+
+Add to `~/.zshrc`:
+
+```shell
+eval "$(alpyki completion --shell zsh)"
+```
+
+#### Fish
+
+Add to `~/.config/fish/config.fish`, or run `alpyki completion --shell fish > ~/.config/fish/completions/alpyki.fish`:
+
+```shell
+alpyki completion --shell fish | source
 ```
 
 ### Debug output

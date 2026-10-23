@@ -38,7 +38,7 @@ repos:
       language: python
       language_version: python3
       pass_filenames: false
-      additional_dependencies: [ "pdoc==12.2.0" ]
+      additional_dependencies: ["pdoc==12.2.0", "argcomplete==3.7.2", "Jinja2==3.1.6"]
       entry: pdoc --no-search --output-dir docs alpyki
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.16.1

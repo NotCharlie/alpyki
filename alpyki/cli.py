@@ -12,6 +12,7 @@ from typing import Callable, Optional
 from uuid import uuid4
 from zipfile import ZIP_DEFLATED, ZipFile
 
+from argcomplete import autocomplete, shellcode
 from jinja2 import Environment, PackageLoader
 
 
@@ -535,17 +536,32 @@ def show_link(args: argparse.Namespace) -> None:
         sys.exit(1)
 
 
+def completion(args: argparse.Namespace) -> None:
+    """
+    Entry point for the `completion` command. Generates a shell completion script.
+
+    ```
+    usage: alpyki completion [-h] --shell {bash,zsh,fish}
+
+    options:
+      -h, --help            show this help message and exit
+      --shell SHELL         Shell to generate completion script for (bash, zsh, fish)
+    ```
+    """
+    print(shellcode(["alpyki"], shell=args.shell))
+
+
 def _cli():
     """
     The entry point for the CLI.
 
     ```
-    usage: alpyki [-h] {new,vendor,link,package,version,name,show-link} ...
+    usage: alpyki [-h] {new,vendor,link,package,version,name,show-link,completion} ...
 
     Build Python workflows for Alfred with ease
 
     positional arguments:
-      {new,vendor,link,package,version,name,show-link}
+      {new,vendor,link,package,version,name,show-link,completion}
         new                 Create a new workflow
         vendor              Install workflow dependencies
         link                Create a symbolic link to this workflow in Alfred
@@ -553,6 +569,7 @@ def _cli():
         version             Display the version of the workflow
         name                Display the name of the workflow
         show-link           Display the link in the installed workflows directory for this project
+        completion          Generate shell completion script
 
     options:
       -h, --help            show this help message and exit
@@ -665,6 +682,17 @@ def _cli():
     )
     show_link_parser.set_defaults(func=show_link)
 
+    completion_parser = subparsers.add_parser("completion", help="Generate shell completion script")
+    completion_parser.add_argument(
+        "--shell",
+        type=str,
+        required=True,
+        choices=["bash", "zsh", "fish"],
+        help="Shell to generate completion script for (bash, zsh, fish)",
+    )
+    completion_parser.set_defaults(func=completion)
+
+    autocomplete(parser)
     args = parser.parse_args()
 
     logging.basicConfig(
