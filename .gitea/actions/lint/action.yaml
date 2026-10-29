@@ -4,7 +4,7 @@ runs:
   using: composite
   steps:
     - name: Lint other Markdown files
-      uses: DavidAnson/markdownlint-cli2-action@v24.2.0
+      uses: DavidAnson/markdownlint-cli2-action@v25.0.0
       with:
         config: .markdownlint.yaml
         globs: "**/*.md"
