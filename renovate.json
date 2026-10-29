@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "enabledManagers": ["poetry", "github-actions", "pre-commit"],
+  "enabledManagers": ["pip_requirements", "pyproject", "github-actions", "pre-commit"],
   "pre-commit": {
     "enabled": true
   }
