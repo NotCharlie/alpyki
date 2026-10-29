@@ -4,5 +4,6 @@
   "enabledManagers": ["pip_requirements", "setup-cfg", "pip_setup", "github-actions", "pre-commit"],
   "pre-commit": {
     "enabled": true
-  }
+  },
+  "dependencyDashboard": false
 }
