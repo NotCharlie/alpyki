@@ -5,6 +5,7 @@ runs:
   steps:
     - name: Lint other Markdown files
       uses: DavidAnson/markdownlint-cli2-action@v25.0.0
+      timeout-minutes: 2
       with:
         config: .markdownlint.yaml
         globs: "**/*.md"
