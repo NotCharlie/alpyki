@@ -5,5 +5,7 @@
   "pre-commit": {
     "enabled": true
   },
-  "dependencyDashboard": false
+  "dependencyDashboard": false,
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0
 }
